@@ -35,6 +35,6 @@ jobs:
           cache-to: type=gha,mode=max
           push: true
           tags: |
-            ccrayz/test-server:${{steps.prepare.outputs.IMAGE_TAG }},
-            ccrayz/test-server:latest
+            ccrayz/sandbox-api:${{steps.prepare.outputs.IMAGE_TAG }},
+            ccrayz/sandbox-api:latest
           platforms: linux/amd64, linux/arm64

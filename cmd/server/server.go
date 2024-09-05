@@ -36,7 +36,7 @@ var ServerCmd = &cobra.Command{
 // TODO: add opentelemetry middleware
 func contextMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		ctx := context.WithValue(c.Request.Context(), "requestID", "ccrayz-server")
+		ctx := context.WithValue(c.Request.Context(), "requestID", "sandbox-api")
 		c.Request = c.Request.WithContext(ctx)
 		c.Next()
 	}
