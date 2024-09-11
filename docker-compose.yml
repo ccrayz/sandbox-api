@@ -1,0 +1,17 @@
+services:
+  api:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/sandboxdb
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_DB=sandboxdb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres

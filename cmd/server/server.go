@@ -14,6 +14,8 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
+var serverName string
+
 var ServerCmd = &cobra.Command{
 	Use:   "server",
 	Short: "Server is a CLI application",
@@ -25,8 +27,10 @@ var ServerCmd = &cobra.Command{
 		r.GET("/metrics", gin.WrapH(promhttp.Handler()))
 		r.GET("/health", handlers.HealthCheck)
 		r.GET("/error", handlers.ChangeErrorFlag)
-
 		r.POST("/block", handlers.GetLatesBlocks)
+
+		addDynamicHandlers(r)
+
 		if err := r.Run(); err != nil {
 			fmt.Println("Failed to start server:", err)
 		}
@@ -36,13 +40,31 @@ var ServerCmd = &cobra.Command{
 // TODO: add opentelemetry middleware
 func contextMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		ctx := context.WithValue(c.Request.Context(), "requestID", "sandbox-api")
+		ctx := context.WithValue(c.Request.Context(), "requestID", serverName)
 		c.Request = c.Request.WithContext(ctx)
 		c.Next()
 	}
 }
 
+func addDynamicHandlers(r *gin.Engine) {
+	log.Println("Add dynamic path")
+	r.GET("/dynamic", func(c *gin.Context) {
+		handlers.DynamicHandler(c, serverName)
+	})
+	r.GET("/call", func(c *gin.Context) {
+		handlers.CallOtherService(c, os.Getenv("CALL_SERVICE"), "GET", "dynamic", []interface{}{})
+	})
+
+}
+
 func init() {
 	log.Println("Show Server Config")
+	serverName = os.Getenv("SERVER_NAME")
+	if serverName == "" {
+		serverName = "sandbox-api"
+	}
+
+	log.Println("- SERVER_NAME:", serverName)
+	log.Println("- CALL_SERVICE:", os.Getenv("CALL_SERVICE"))
 	log.Println("- ETH_L2_ENDPOINT:", os.Getenv("ETH_L2_ENDPOINT"))
 }

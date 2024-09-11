@@ -69,8 +69,6 @@ func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*htt
 		return resp, err
 	}
 
-	println(resp.Body)
-
 	buf := new(bytes.Buffer)
 	teeReader := io.TeeReader(resp.Body, buf)
 	decErr := json.NewDecoder(teeReader).Decode(v)
