@@ -47,14 +47,16 @@ func contextMiddleware() gin.HandlerFunc {
 }
 
 func addDynamicHandlers(r *gin.Engine) {
-	log.Println("Add dynamic path")
+	log.Println("Add dynamic path =============================================")
 	r.GET("/dynamic", func(c *gin.Context) {
 		handlers.DynamicHandler(c, serverName)
 	})
 	r.GET("/call", func(c *gin.Context) {
-		handlers.CallOtherService(c, os.Getenv("CALL_SERVICE"), "GET", "dynamic", []interface{}{})
+		handlers.CallService(c, os.Getenv("CALL_SERVICE"), "GET", "dynamic", []interface{}{})
 	})
-
+	r.GET("/call-multiple", func(c *gin.Context) {
+		handlers.CallMultipleServices(c, []string{os.Getenv("CALL_SERVICES")}, "GET", "dynamic", []interface{}{})
+	})
 }
 
 func init() {
@@ -66,5 +68,6 @@ func init() {
 
 	log.Println("- SERVER_NAME:", serverName)
 	log.Println("- CALL_SERVICE:", os.Getenv("CALL_SERVICE"))
+	log.Println("- CALL_SERVICE:", os.Getenv("CALL_SERVICES"))
 	log.Println("- ETH_L2_ENDPOINT:", os.Getenv("ETH_L2_ENDPOINT"))
 }

@@ -1,17 +1,48 @@
 services:
-  api:
-    build: .
+  sandbox-1:
+    container_name: sandbox-1
+    image: ccrayz/sandbox-api:latest
     ports:
-      - "3000:3000"
-    volumes:
-      - .:/app
-    depends_on:
-      - db
+      - "9001:8080"
     environment:
-      - DATABASE_URL=postgres://postgres:postgres@db:5432/sandboxdb
-  db:
-    image: postgres
+      - SERVER_NAME=sandbox-1
+
+  sandbox-2:
+    container_name: sandbox-2
+    image: ccrayz/sandbox-api:latest
+    ports:
+      - "9002:8080"
     environment:
-      - POSTGRES_DB=sandboxdb
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - SERVER_NAME=sandbox-2
+
+  sandbox-3:
+    container_name: sandbox-3
+    image: ccrayz/sandbox-api:latest
+    ports:
+      - "9003:8080"
+    environment:
+      - SERVER_NAME=sandbox-3
+
+  sandbox-4:
+    container_name: sandbox-4
+    image: ccrayz/sandbox-api:latest
+    ports:
+      - "9004:8080"
+    environment:
+      - SERVER_NAME=sandbox-4
+
+  sandbox-5:
+    container_name: sandbox-5
+    image: ccrayz/sandbox-api:latest
+    ports:
+      - "9005:8080"
+    environment:
+      - SERVER_NAME=sandbox-5
+
+  sandbox-6:
+    container_name: sandbox-6
+    image: ccrayz/sandbox-api:latest
+    ports:
+      - "9006:8080"
+    environment:
+      - SERVER_NAME=sandbox-6
