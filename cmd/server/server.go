@@ -27,7 +27,7 @@ var ServerCmd = &cobra.Command{
 		r.GET("/metrics", gin.WrapH(promhttp.Handler()))
 		r.GET("/health", handlers.HealthCheck)
 		r.GET("/error", handlers.ChangeErrorFlag)
-		r.POST("/block", handlers.GetLatesBlocks)
+		r.GET("/block", handlers.GetLatesBlocks)
 
 		addDynamicHandlers(r)
 
